@@ -1,0 +1,31 @@
+.container {
+    background: transparent;
+    color: #000;
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    
+}
+
+.container-borders {
+    border-radius: 0.6rem;
+    padding: 1rem;
+}
+
+.weather-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 1rem;
+}
+
+.weather-stats {
+    display: flex;
+    flex-direction: column;
+}
+
+.temp {
+    font-size: 1.5rem;
+}
