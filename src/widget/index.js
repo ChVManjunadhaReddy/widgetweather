@@ -1,11 +1,15 @@
 import ReactDOM from "react-dom";
 import {TiWeatherPartlySunny} from "react-icons/ti";
-import {getLocation, getCity, fetchWeatherGeoLocation} from './api';
+import {getLocation, fetchWeatherGeoLocation, fetchWeather} from './api';
 import { useState, useEffect } from "react";
 import React  from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import "./index.css";
 
-function Badge() {
+function Badge(props) {
+    const {customLoc} = props;
     const [positionResponse, setPositionResponse] = useState();
     const [temperature, setTemperature] = useState("");
     const [time, setTime] = useState(new Date());
@@ -44,7 +48,7 @@ function Badge() {
     }, [])
 
     useEffect(() => {
-        if(positionResponse) {
+        if(positionResponse && !customLoc) {
             fetchWeatherGeoLocation(positionResponse)
                 .then(res => {
                     setTemperature((res.main.temp-273.15).toFixed(2));
@@ -52,17 +56,34 @@ function Badge() {
                 .catch(err => {
                     console.log(err);
                 })
+        } else {
+            if(customLoc) {
+                fetchWeather(customLoc)
+                .then(res => {
+                    setTemperature((res.main.temp-273.15).toFixed(2));
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
         }
-    }, [positionResponse])
+    }, [positionResponse, customLoc, location])
+
+    const handleWidgetClose = (event) => {
+        event.preventDefault();
+        const widget = document.getElementById("widget-weather");
+        widget.remove();
+    }
 
     return ReactDOM.createPortal(
-        <div className="container container-borders">
+        <div className="container-cst container-borders">
+            <div className="close" onClick={handleWidgetClose}>&times;</div>
             <div className="weather-details">
-                <TiWeatherPartlySunny color="black" fontSize="3.5rem" />
+                <TiWeatherPartlySunny color="white" fontSize="3.5rem" />
                 <div className="weather-stats">
                     {temperature ? <span className="temp">{temperature}&nbsp;<sup>o</sup>c</span> : "--"}
                     <span>{time.toLocaleTimeString()}</span>
-                    {location ? <span>{location}</span> : "--"}
+                    {location ? <span>{customLoc ? customLoc : <span>{location}<br/>Current location</span>}</span> : "--"}
                 </div>
             </div>
         </div>,
