@@ -1,0 +1,2 @@
+In this folder we have code widget component that can be used anywhere by downloading the package which I published in npm. 
+The command to download my package is  'npm install weather-widget-react-test'
