@@ -1,0 +1,1 @@
+This is the sample window to demostrate the working of published package by installing the package and using it.
